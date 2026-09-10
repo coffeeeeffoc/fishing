@@ -15,7 +15,12 @@ export const GAME = {
   bossWeakness: 2.5, bossTailSlow: .5, bossSlowDuration: 3.5, bossDashDrain: 12,
   bossDashPeriod: 8, bossDashDuration: 1.25, bossSummonPeriod: 12,
   bulletLife: 2.2, coinLife: .8, shakeDecay: 18,
+  bombRadius:230, bombDamage:240, freezeRadius:95, energyDrop:35, powerInventoryCap:5,
+  rapidMultiplier:2, autoAimRadius:260, bossRageThreshold:.5, bossRageSpeed:1.7, bossDashSpeed:3,
+  bossSummonCount:7, waveChance:.55, waveMin:3, waveExtra:3, rushCount:12,
+  goldenEventChance:.6, treasureEventChance:.55, goldenEventCount:5, treasureEventCount:4,
 } as const;
+export const BEHAVIOR={pufferSpeed:.6,pufferPausePeriod:5,pufferPauseDuration:1,pufferPauseSpeed:.08,swordPeriod:4,swordDashStart:3.1,swordDashSpeed:3.2,goldenAcceleration:6,goldenMaxAcceleration:1.2,turtleTurnAfter:4,jellyPeriod:5,jellyInvincibleStart:3.7,exitAge:35} as const;
 export const FISH: Record<FishKind, { name: string; hp: number; speed: number; reward: number; size: number; spawnRate: number; behavior: string; color: string; tip: string }> = {
   clown: {name:'小丑鱼',hp:18,speed:100,reward:12,size:22,spawnRate:48,behavior:'school',color:'#ffad57',tip:'成群出没 · 散射收割'},
   puffer: {name:'河豚',hp:65,speed:62,reward:38,size:29,spawnRate:13,behavior:'pause',color:'#e9ce73',tip:'受击膨胀 · 防御提升'},

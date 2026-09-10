@@ -1,4 +1,4 @@
-import { FISH, GAME, type FishKind, type WeaponKind } from './config.ts';
+import { FISH, GAME, BEHAVIOR, type FishKind, type WeaponKind } from './config.ts';
 export interface Fish {
   id:number; kind:FishKind; x:number; y:number; prevX:number; prevY:number; baseY:number; angle:number; dir:number;
   hp:number; age:number; phase:number; hit:number; slow:number; inflated:boolean; invulnerable:boolean; alive:boolean; summoned:number;
@@ -35,7 +35,7 @@ export class FishGrid {
   rebuild(fish:Fish[]) {
     for(const cell of this.cells) cell.length=0;
     for(const f of fish) if(f.alive) {
-      const r=FISH[f.kind].size*(f.inflated?1.3:1);
+      const r=FISH[f.kind].size*(f.inflated?1.3:1)*(f.kind==='sword'?1.9:1.3);
       this.eachCell(f.x-r,f.y-r,f.x+r,f.y+r,cell=>cell.push(f));
     }
   }
@@ -65,20 +65,20 @@ export function segmentHit(ax:number,ay:number,bx:number,by:number,x:number,y:nu
 export function moveFish(f:Fish,dt:number,freeze:boolean) {
   const spec=FISH[f.kind]; f.prevX=f.x; f.prevY=f.y; f.age+=dt;
   f.hit=Math.max(0,f.hit-dt); f.slow=Math.max(0,f.slow-dt);
-  f.invulnerable=f.kind==='jelly'&&(f.age+f.phase)%5>3.7;
-  let speed=spec.speed*(freeze?GAME.freezeSlow:1)*(f.slow>0?GAME.freezeSlow:1);
-  if(f.inflated) speed*=.6;
-  if(spec.behavior==='pause'&&(f.age+f.phase)%5<1) speed*=.08;
-  if(spec.behavior==='dash'&&(f.age+f.phase)%4>3.1) speed*=3.2;
-  if(spec.behavior==='accelerate') speed*=1+Math.min(f.age/6,1.2);
+  f.invulnerable=f.kind==='jelly'&&(f.age+f.phase)%BEHAVIOR.jellyPeriod>BEHAVIOR.jellyInvincibleStart;
+  let speed=spec.speed*(freeze?GAME.freezeSlow:1)*(f.slow>0?(f.kind==='shark'?GAME.bossTailSlow:GAME.freezeSlow):1);
+  if(f.inflated) speed*=BEHAVIOR.pufferSpeed;
+  if(spec.behavior==='pause'&&(f.age+f.phase)%BEHAVIOR.pufferPausePeriod<BEHAVIOR.pufferPauseDuration) speed*=BEHAVIOR.pufferPauseSpeed;
+  if(spec.behavior==='dash'&&(f.age+f.phase)%BEHAVIOR.swordPeriod>BEHAVIOR.swordDashStart) speed*=BEHAVIOR.swordDashSpeed;
+  if(spec.behavior==='accelerate') speed*=1+Math.min(f.age/BEHAVIOR.goldenAcceleration,BEHAVIOR.goldenMaxAcceleration);
   if(spec.behavior==='turn') {
-    if(f.age>4&&f.phase<10) { f.dir*=-1; f.phase+=20; }
+    if(f.age>BEHAVIOR.turtleTurnAfter&&f.phase<10) { f.dir*=-1; f.phase+=20; }
   }
   if(f.kind==='shark') {
-    const rage=f.hp<spec.hp*.5;
-    speed*=rage?1.7:1;
+    const rage=f.hp<spec.hp*GAME.bossRageThreshold;
+    speed*=rage?GAME.bossRageSpeed:1;
     const dash=f.age%GAME.bossDashPeriod>GAME.bossDashPeriod-GAME.bossDashDuration;
-    if(dash) speed*=3;
+    if(dash) speed*=GAME.bossDashSpeed;
     if(f.x<110) f.dir=1; if(f.x>GAME.width-110) f.dir=-1;
     f.y=230+Math.sin(f.age*.65)*100;
   } else {
@@ -89,7 +89,13 @@ export function moveFish(f:Fish,dt:number,freeze:boolean) {
   f.x+=f.dir*speed*dt;
   const heading=Math.atan2(f.y-f.prevY,f.x-f.prevX);
   f.angle+=angleDelta(f.angle,heading)*Math.min(1,dt*9);
-  if(f.kind!=='shark'&&(f.x< -170||f.x>GAME.width+170||f.age>35)) f.alive=false;
+  if(f.kind!=='shark'&&(f.x< -170||f.x>GAME.width+170||f.age>BEHAVIOR.exitAge)) f.alive=false;
+}
+
+export function fishSegmentHit(f:Fish,ax:number,ay:number,bx:number,by:number) {
+  const r=FISH[f.kind].size*(f.inflated?1.3:1),cos=Math.cos(f.angle),sin=Math.sin(f.angle);
+  const rx=r*(f.kind==='sword'?1.7:1.3)+5,ry=r*(f.kind==='shark'?.42:f.kind==='sword'?.53:1)+5;
+  return segmentHit(((ax-f.x)*cos+(ay-f.y)*sin)/rx,(-(ax-f.x)*sin+(ay-f.y)*cos)/ry,((bx-f.x)*cos+(by-f.y)*sin)/rx,(-(bx-f.x)*sin+(by-f.y)*cos)/ry,0,0,1);
 }
 
 export function hitMultiplier(f:Fish,x:number,y:number) {
