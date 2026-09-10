@@ -11,7 +11,7 @@ npm install
 npm run dev
 ```
 
-打开 http://localhost:43110 。手机与电脑同一 Wi-Fi 时访问终端显示的 Network 地址，横屏游玩。防火墙需允许该端口。
+打开 http://localhost:43210 。手机与电脑同一 Wi-Fi 时访问终端显示的 Network 地址，横屏游玩。防火墙需允许该端口。
 
 ```sh
 npm run typecheck
