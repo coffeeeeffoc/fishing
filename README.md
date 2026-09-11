@@ -46,6 +46,10 @@ npm run test:static
 
 ## 构建与部署
 
+推送 `main` 后 GitHub Actions 自动测试、构建并发布到 [fishing Pages](https://coffeeeeffoc.github.io/fishing/)。PR 只验证构建。Pages Source 使用 GitHub Actions。
+
+本游戏同时作为 `small-games/games/fishing` 的 Git submodule 集成。推送本仓库后，在 small-games 更新并提交子模块指针，再推送 `main`，即可更新统一大厅和后续 Android APK 内置资源；父仓库固定使用已提交的游戏版本。独立仓库使用 npm 与 `package-lock.json`，父工作区使用 pnpm 与根锁文件。
+
 ```sh
 npm run build
 npm run preview
