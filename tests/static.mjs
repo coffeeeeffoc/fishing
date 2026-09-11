@@ -5,6 +5,8 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 import { chromium } from '@playwright/test';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 
 const root = path.resolve(fileURLToPath(new URL('../dist/', import.meta.url)));
 const artifacts = new URL('../artifacts/', import.meta.url);
@@ -108,6 +110,14 @@ try {
   };
   await writeFile(new URL('production-report.json', artifacts), JSON.stringify(report, null, 2));
   console.log('Production static checks passed:', JSON.stringify(report));
+  const fullscreen = await promisify(execFile)(
+    process.execPath,
+    [fileURLToPath(new URL('./fullscreen.mjs', import.meta.url))],
+    {
+      env: { ...process.env, TEST_URL: `http://127.0.0.1:${server.address().port}/reef/` },
+    },
+  );
+  console.log(fullscreen.stdout.trim());
 } finally {
   await browser.close();
   await new Promise((resolve) => server.close(resolve));

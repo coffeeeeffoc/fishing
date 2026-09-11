@@ -11,6 +11,7 @@
     "lint": "eslint .",
     "test": "node --experimental-strip-types --test tests/*.test.ts",
     "test:browser": "node tests/browser.mjs",
+    "test:fullscreen": "node tests/fullscreen.mjs",
     "test:static": "npm run build && node tests/static.mjs"
   },
   "dependencies": {

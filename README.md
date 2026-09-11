@@ -22,6 +22,7 @@ npm run dev
 - 道具在右下角，炸弹作用于最后瞄准的位置。每局初始各 1 个，捕获宝箱鱼补充道具或能量。
 - 空格 / Escape 暂停，数字 1–4 切换武器。页面切后台、失焦、转为竖屏会自动暂停，回来需手动继续。
 - 设置与海域手册可从首页或暂停页打开。
+- 手机浏览器横屏时，点右上角“全屏”隐藏浏览器操作栏；退出全屏后可再次点击。已全屏的 App、主屏幕独立模式或容器不显示此按钮。不支持网页全屏的浏览器会显示提示。
 
 ## 验证
 
@@ -38,6 +39,7 @@ npm run build
 npx playwright install chromium webkit
 # 保持 npm run dev 运行，再在另一个终端执行：
 npm run test:browser
+npm run test:fullscreen
 # 自动构建并启动临时静态服务器，验证 /reef/ 子目录与生产界面：
 npm run test:static
 ```

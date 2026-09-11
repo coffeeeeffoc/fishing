@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Game } from './game/engine.ts';
 import { GameCanvas } from './components/GameCanvas.tsx';
+import { FullscreenButton } from './components/FullscreenButton.tsx';
 import { WeaponIcon } from './components/Icons.tsx';
 import {
   GAME,
@@ -158,6 +159,7 @@ export default function App() {
             </div>
           )}
           <div className="topright">
+            {!settings && !guide && <FullscreenButton />}
             {s.mode !== 'start' && (
               <div className={`combo ${s.combo >= 10 ? 'hot' : ''}`} key={Math.floor(s.combo / 10)}>
                 <small>COMBO</small>
