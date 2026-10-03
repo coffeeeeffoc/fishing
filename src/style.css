@@ -824,10 +824,6 @@ meter::-webkit-meter-optimum-value {
 .guide-heading .eyebrow {
   margin: 0 0 7px;
 }
-.guide-heading button {
-  min-width: 70px;
-  font-size: 11px;
-}
 .fish-guide {
   display: grid;
   grid-template-columns: 1fr 1fr;

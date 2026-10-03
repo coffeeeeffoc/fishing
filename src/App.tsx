@@ -453,9 +453,6 @@ export default function App() {
                   <span className="eyebrow">FIELD NOTES</span>
                   <h2>海域手册</h2>
                 </div>
-                <button autoFocus onClick={() => setGuide(false)}>
-                  关闭 ×
-                </button>
               </div>
               <p>
                 按住射击、拖动瞄准。2 秒内连续捕获可延续 Combo；金币倍率最高 2.5
@@ -474,6 +471,9 @@ export default function App() {
                 巨鲨半血狂暴并召唤鱼群。冰冻或击尾阻止冲刺扣能量。道具持续时间显示在海面上方。首局捕获
                 3 / 8 / 12 条鱼解锁全部武器。
               </p>
+              <button className="primary" autoFocus onClick={() => setGuide(false)}>
+                返回航行
+              </button>
             </section>
           </div>
         )}
