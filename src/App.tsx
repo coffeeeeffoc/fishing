@@ -1,3 +1,4 @@
+import '../dev-mode.js';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Game } from './game/engine.ts';
 import { GameCanvas } from './components/GameCanvas.tsx';
@@ -61,7 +62,7 @@ export default function App() {
     sync();
   };
   useEffect(() => {
-    if (import.meta.env.DEV) {
+    if (window.SmallGamesDev.isEnabled()) {
       const devWindow = window as Window & { __tidebreak?: Game };
       devWindow.__tidebreak = game;
       return () => {
@@ -477,7 +478,7 @@ export default function App() {
             </section>
           </div>
         )}
-        {import.meta.env.DEV && s.mode === 'playing' && (
+        {window.SmallGamesDev.isEnabled() && s.mode === 'playing' && (
           <output className="debug" aria-label="开发性能统计">
             {game.metrics.fps} FPS · {game.metrics.frameMs.toFixed(1)} ms · F {game.fish.count()} /
             B {game.bullets.count()} / P {game.particles.count()}

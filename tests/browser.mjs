@@ -96,7 +96,9 @@ for (const [name, type] of [
     });
   });
   try {
-    await page.goto(base);
+    const developerUrl = new URL(base);
+    developerUrl.searchParams.set('dev', '1');
+    await page.goto(developerUrl.href);
     await page.getByRole('button', { name: '开始航行' }).click();
     await page.waitForTimeout(250);
     const state = () => page.evaluate(() => window.__tidebreak.snapshot());

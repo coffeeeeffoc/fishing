@@ -67,6 +67,6 @@ npm run preview
 - `TEST_REPORT.md`：验收矩阵、真实试玩记录、测试方式与限制。
 - `PLAN.md` / `CHANGELOG.md`：阶段进度和迭代记录。
 
-开发模式左下/右下显示 FPS、更新+绘制耗时、鱼/弹丸/粒子数。生产构建不显示诊断，也不暴露测试用游戏对象。
+通过 URL 的 `?dev=1`（也支持 `?dev`、`?dev=true`），或设置 `localStorage.setItem('dev', '1')` 后刷新开启开发模式。独立页面和 Shell iframe 均支持，`?dev=0` 优先于存储并显式关闭。开发模式显示性能统计、统一触屏调试面板及测试用游戏对象；正式构建保留显式启用能力，默认不显示诊断。
 
 本地进度使用 `tidebreak.save.v1`，保存失败会提示并退回内存；清除浏览器网站数据会清除进度。震动、Web Audio 不可用时自动降级。已验证桌面 Chromium / WebKit 及移动视口；物理 iPhone / Android 的持续帧率与系统手势仍需要真机实测。
